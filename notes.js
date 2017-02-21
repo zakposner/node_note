@@ -1,6 +1,10 @@
 const fs = require('fs');
 const _ = require('lodash');
 
+// =====
+// Internal Functions
+// =====
+
 const setNotes = () => {
 
      // Check for existing note list
@@ -13,11 +17,25 @@ const setNotes = () => {
     } else {
         notes = [];
     }
+
     return notes;
+
 }
 
 const saveNotes = (notes) => {
+
     fs.writeFileSync('notes-data.json',JSON.stringify(notes));
+
+}
+
+// =====
+// Exported Functions
+// =====
+
+const logNote = (note) => {
+    console.log(note.title);
+    console.log('----------');
+    console.log(note.body);
 }
 
 const addNote = (title, body) => {
@@ -36,7 +54,9 @@ const addNote = (title, body) => {
 
         // for tracking
         return ({title, body});
+
     }
+
 }
 
 const getAll = () => {
@@ -46,49 +66,32 @@ const getAll = () => {
     // read the list of notes
     console.log(notes);
     if (notes.length = 0) console.log('There are no notes to display');
+
 }
 
 const readNote = (title) => {
     
-    let match;
     let notes = setNotes();
-    notes.forEach((note) => {
-        if (note.title === title) {
 
-            match = note.body;
+    // Find matching element, pull it from array
+    let match = notes.filter((note) => note.title === title)[0];
+    return match; 
 
-            // read the note
-            console.log(match);
-        }
-    });
-    if (!match) console.log('There is no note matching that title');
 }
 
 const removeNote = (title) => {
 
-    let match;
     let notes = setNotes();
-    notes.forEach((note) => {
-        if (note.title === title) {
-
-            match = note.title;
-
-            // Remove note from the list
-            notes = _.remove(notes, (note) => {
-                return note.title !== match;
-            })
-
-            // Update the data file
-            saveNotes(notes);
-            console.log(`${match} was deleted`);
-        }
-    });
-    if (!match) console.log('There is no note matching that title');
+    let filtered = notes.filter((note) => note.title !== title);
+    saveNotes(filtered);
+    return notes.length !== filtered.length;
+    
 }
 
 module.exports = {
     addNote,
     getAll,
     readNote,
-    removeNote
+    removeNote,
+    logNote
 }
