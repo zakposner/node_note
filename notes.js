@@ -33,9 +33,11 @@ const saveNotes = (notes) => {
 // =====
 
 const logNote = (note) => {
+
     console.log(note.title);
     console.log('----------');
     console.log(note.body);
+    
 }
 
 const addNote = (title, body) => {
@@ -62,10 +64,7 @@ const addNote = (title, body) => {
 const getAll = () => {
 
     let notes = setNotes();
-
-    // read the list of notes
-    console.log(notes);
-    if (notes.length = 0) console.log('There are no notes to display');
+    return notes;
 
 }
 

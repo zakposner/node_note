@@ -4,7 +4,33 @@ const yargs = require('yargs');
 
 const notes = require('./notes.js');
 
-const argv = yargs.argv;
+const titleOptions = {
+    describe: 'The title of note.',
+    demand: true,
+    alias: 't'
+}
+
+const bodyOptions = {
+    describe: 'The contents of the note.',
+    demand: true,
+    alias: 'b'
+}
+
+const argv = yargs
+    .command('add', 'Creates a new note.', {
+        title: titleOptions,
+        body: bodyOptions
+    })
+    .command('list', 'Lists all notes currently being stored.')
+    .command('read', 'Finds note by title and returns the full note', {
+        title: titleOptions
+    })
+    .command('remove', 'Finds a note by title and deletes it.', {
+        title: titleOptions
+    })
+    .help()
+    .argv;
+
 const command = argv._[0];
 
 // Create data file if it doesnt exist
@@ -25,7 +51,11 @@ if (command === 'add') {
 
 } else if (command === 'list') {
 
-    notes.getAll();
+    let noteList = notes.getAll();
+    noteList.forEach((note) => {
+        notes.logNote(note);
+        console.log('\n');
+    })
 
 } else if (command === 'read') {
 
